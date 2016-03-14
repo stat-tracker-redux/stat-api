@@ -12,4 +12,4 @@ before_script:
 
 script:
   stats/manage.py test stats &
-  functional_tests.py
+  coverage run functional_tests.py
