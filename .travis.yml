@@ -11,4 +11,4 @@ before_script:
   python stats/manage.py runserver &
 
 script:
-  stats/manage.py test
+  python manage.py test
