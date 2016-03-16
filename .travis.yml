@@ -8,7 +8,12 @@ install: "pip install -r requirements.txt"
 
 # command to run server
 before_script:
-  python stats/manage.py runserver &
+  # python stats/manage.py runserver
 
 script:
-  stats/manage.py test
+  - python stats/manage.py test stats
+  - python functional_tests.py
+  - coverage run -p stats/manage.py test
+  - coverage run -p functional_tests.py
+  - coverage combine
+  - coverage report
