@@ -11,5 +11,5 @@ before_script:
   python stats/manage.py runserver
 
 script:
-  - python stats/manage.py test stats
+  - python stats/manage.py test stats && 
   - python functional_tests.py
