@@ -12,8 +12,9 @@ before_script:
 
 script:
   - python stats/manage.py test stats
-  - python functional_tests.py
-  - coverage run -p stats/manage.py test
-  - coverage run -p functional_tests.py
-  - coverage combine
+  # - python functional_tests.py
+  # - coverage run -p stats/manage.py test
+  # - coverage run -p functional_tests.py
+  # - coverage combine
+  - coverage run stats/manage.py test
   - coverage report
