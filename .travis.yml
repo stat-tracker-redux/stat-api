@@ -16,5 +16,5 @@ script:
   # - coverage run -p stats/manage.py test
   # - coverage run -p functional_tests.py
   # - coverage combine
-  - coverage run stats/manage.py test
+  - coverage run stats/manage.py test stats
   - coverage report
