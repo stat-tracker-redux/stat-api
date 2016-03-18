@@ -1,9 +1,10 @@
-import unittest
+from django.test import TestCase, LiveServerTestCase
+
+from requests import get, post
 
 
-class SmokeTest(unittest.TestCase):
-    def test_func_false_is_not_true(self):
-        self.assertTrue(False)
-
-if __name__ == '__main__':
-    unittest.main()
+class UserExperienceTestCase(LiveServerTestCase):
+    def test_can_create_a_new_user(self):
+        register_resp = get(self.live_server_url + '/register/')
+        self.assertEquals(register_resp.status_code, 200)
+        self.assertEquals(register_resp.text, '')
