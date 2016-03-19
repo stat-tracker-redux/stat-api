@@ -12,5 +12,5 @@ class UserURLsTest(TestCase):
         """
         Tests that /register/ endpoint resolves to a view titled create_user
         """
-        found_create_user = resolve('register')
+        found_create_user = resolve('/register/')
         self.assertEqual(found_create_user.func, create_user)
