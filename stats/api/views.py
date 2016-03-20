@@ -6,4 +6,7 @@ from django.http import HttpResponse
 
 
 def user_create(request):
-    return HttpResponse('')
+    if request.method == 'POST':
+        return HttpResponse('')
+    else:
+        return HttpResponse('', status=500)
