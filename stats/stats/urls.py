@@ -19,5 +19,5 @@ from api import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^register/$', views.create_user),
+    url(r'^register/$', views.user_create),
 ]
