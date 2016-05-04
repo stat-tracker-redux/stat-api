@@ -18,8 +18,8 @@ class UserExperienceTestCase(LiveServerTestCase):
         self.assertEquals(register_resp.status_code, 200)
         self.assertEquals(register_resp.text, '')
 
-        self.assertEqual(User.objects.get(username='superlunk360').email(),
+        self.assertEqual(User.objects.get(username='superlunk360').email,
                          'todd.mcbuffy@gmail.com')
         self.assertEqual(User.objects.get(
-                         email='todd.mcbuff@gmail.com').username(),
+                         email='todd.mcbuff@gmail.com').username,
                          'superlunk360')
