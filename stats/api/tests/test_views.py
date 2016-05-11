@@ -7,9 +7,9 @@ from api.views import user_create
 class UserViewsTest(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
-        self.user = User.objects.create_user(
-            username='test', email='test@email.com', password='password'
-        )
+        # self.user = User.objects.create_user(
+        #     username='test', email='test@email.com', password='password'
+        # )
 
     def test_register_url_returns_empty_string(self):
         """
@@ -28,6 +28,17 @@ class UserViewsTest(TestCase):
         post_request = self.factory.post('/register/', content_type='application/json', data=json_string)
         post_response = user_create(post_request)
         self.assertEqual(post_response.status_code, 200)
+
+    def test_register_url_good_post_creates_user(self):
+        """
+        Tests that a POST request with the correct JSON format
+        creates a new user
+        """
+        json_string = '{"username": "user", "email": "user@email.com", "password": "supersecret"}'
+        post_request = self.factory.post('/register/', content_type='application/json', data=json_string)
+        post_response = user_create(post_request)
+        self.assertEqual(User.objects.get(username='user').email,
+                         "user@email.com")
 
     def test_register_url_get_returns_error(self):
         """
