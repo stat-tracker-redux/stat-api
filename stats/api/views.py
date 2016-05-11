@@ -13,12 +13,12 @@ def user_create(request):
         # user = User.objects.create_user('superlunk360', 'todd.mcbuffy@gmail.com', 'supersecret')
 
         body = request.body.decode('utf-8')
-        # user_info = json.loads(body)
-        # user = User.objects.create_user(user_info['username'],
-        #                                 user_info['email'],
-        #                                 user_info['password'])
-        #
-        # user.save()
+        user_info = json.loads(body)
+        user = User.objects.create_user(user_info['username'],
+                                        user_info['email'],
+                                        user_info['password'])
+
+        user.save()
 
         return HttpResponse('')
     else:
