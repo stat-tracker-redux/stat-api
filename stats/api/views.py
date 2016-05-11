@@ -10,14 +10,15 @@ from django.contrib.auth.models import User
 @csrf_exempt
 def user_create(request):
     if request.method == 'POST':
-        user = User.objects.create_user('superlunk360', 'todd.mcbuffy@gmail.com', 'supersecret')
+        # user = User.objects.create_user('superlunk360', 'todd.mcbuffy@gmail.com', 'supersecret')
 
-        user_info = json.loads(request.body.decode('utf-8'))
-        user = User.objects.create_user(user_info['username'],
-                                        user_info['email'],
-                                        user_info['password'])
-
-        user.save()
+        body = request.body.decode('utf-8')
+        # user_info = json.loads(body)
+        # user = User.objects.create_user(user_info['username'],
+        #                                 user_info['email'],
+        #                                 user_info['password'])
+        #
+        # user.save()
 
         return HttpResponse('')
     else:
