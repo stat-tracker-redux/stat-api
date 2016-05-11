@@ -19,12 +19,12 @@ class UserViewsTest(TestCase):
         response = user_create(request)
         self.assertEqual(response.content, b'')
 
-    def test_register_url_post_returns_200(self):
+    def test_register_url_post_with_good_json_returns_200(self):
         """
         Tests that POST requests get through to register endpoint
+        and that the POST has the correct format
         """
-        # json_string = '{"username": "user", "email": "user@email.com", "password": "supersecret"}'
-        json_string = '{"things": "stuff"}'
+        json_string = '{"username": "user", "email": "user@email.com", "password": "supersecret"}'
         post_request = self.factory.post('/register/', content_type='application/json', data=json_string)
         post_response = user_create(post_request)
         self.assertEqual(post_response.status_code, 200)
