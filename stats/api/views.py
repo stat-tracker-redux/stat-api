@@ -15,11 +15,13 @@ def user_create(request):
 
         body = request.body.decode('utf-8')
         user_info = json.loads(body)
-        user = User.objects.create_user(user_info['username'],
-                                        user_info['email'],
-                                        user_info['password'])
-
-        user.save()
+        try:
+            user = User.objects.create_user(user_info['username'],
+                                            user_info['email'],
+                                            user_info['password'])
+            user.save()
+        except KeyError:
+            return HttpResponse('', status=400)
 
         return HttpResponse('')
     else:
