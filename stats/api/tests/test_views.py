@@ -35,7 +35,9 @@ class UserViewsTest(TestCase):
         creates a new user
         """
         json_string = '{"username": "user", "email": "user@email.com", "password": "supersecret"}'
-        post_request = self.factory.post('/register/', content_type='application/json', data=json_string)
+        post_request = self.factory.post('/register/',
+                                         content_type='application/json',
+                                         data=json_string)
         post_response = user_create(post_request)
         self.assertEqual(User.objects.get(username='user').email,
                          "user@email.com")
@@ -47,3 +49,15 @@ class UserViewsTest(TestCase):
         get_request = self.factory.get('/register/')
         get_response = user_create(get_request)
         self.assertNotEqual(get_response.status_code, 200)
+
+    def test_register_url_bad_json_returns_400_error(self):
+        """
+        Tests that a POST request with an improperly formatted
+        JSON returns an error
+        """
+        json_string = '{"nothing": "my bad JSON"}'
+        post_request = self.factory.post('/register/',
+                                         content_type='application/json',
+                                         data=json_string)
+        post_response = user_create(post_request)
+        self.assertEqual(post_response.status_code, 400)
