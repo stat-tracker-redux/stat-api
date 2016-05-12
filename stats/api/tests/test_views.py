@@ -1,25 +1,49 @@
 from django.http import HttpRequest
-from django.test import TestCase
+from django.test import TestCase, RequestFactory
+from django.contrib.auth.models import User
 from api.views import user_create
 
 
 class UserViewsTest(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+        # self.user = User.objects.create_user(
+        #     username='test', email='test@email.com', password='password'
+        # )
+
     def test_register_url_returns_empty_string(self):
         """
         Tests that a request to the register url returns nothing
         """
-        request = HttpRequest()
+        request = self.factory.get('/register/')
         response = user_create(request)
         self.assertEqual(response.content, b'')
 
-    def test_register_url_requires_post(self):
+    def test_register_url_post_with_good_json_returns_200(self):
         """
-        Tests that POST requests get through, but others do not
+        Tests that POST requests get through to register endpoint
+        and that the POST has the correct format
         """
-        post_request = HttpRequest()
-        post_request.method = 'POST'
-        get_request = HttpRequest()
+        json_string = '{"username": "user", "email": "user@email.com", "password": "supersecret"}'
+        post_request = self.factory.post('/register/', content_type='application/json', data=json_string)
         post_response = user_create(post_request)
-        get_response = user_create(get_request)
         self.assertEqual(post_response.status_code, 200)
+
+    def test_register_url_good_post_creates_user(self):
+        """
+        Tests that a POST request with the correct JSON format
+        creates a new user
+        """
+        json_string = '{"username": "user", "email": "user@email.com", "password": "supersecret"}'
+        post_request = self.factory.post('/register/', content_type='application/json', data=json_string)
+        post_response = user_create(post_request)
+        self.assertEqual(User.objects.get(username='user').email,
+                         "user@email.com")
+
+    def test_register_url_get_returns_error(self):
+        """
+        Tests that GET requests to register endpoint return errors
+        """
+        get_request = self.factory.get('/register/')
+        get_response = user_create(get_request)
         self.assertNotEqual(get_response.status_code, 200)

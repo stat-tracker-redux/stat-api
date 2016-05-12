@@ -1,7 +1,7 @@
-from django.test import TestCase, LiveServerTestCase
-
 from requests import get, post
+import json
 
+from django.test import TestCase, LiveServerTestCase
 from django.contrib.auth.models import User
 
 
@@ -12,14 +12,14 @@ class UserExperienceTestCase(LiveServerTestCase):
         """
         # Todd registers with his email and password
         register_resp = post(self.live_server_url + '/register/',
-                             data={"username": "superlunk360",
-                                   "email": "todd.mcbuffy@gmail.com",
-                                   "password": "supersecret"})
+                             data=json.dumps({"username": "superlunk360",
+                                              "email": "todd.mcbuffy@gmail.com",
+                                              "password": "supersecret"}))
         self.assertEquals(register_resp.status_code, 200)
         self.assertEquals(register_resp.text, '')
 
         self.assertEqual(User.objects.get(username='superlunk360').email,
                          'todd.mcbuffy@gmail.com')
         self.assertEqual(User.objects.get(
-                         email='todd.mcbuff@gmail.com').username,
+                         email='todd.mcbuffy@gmail.com').username,
                          'superlunk360')
