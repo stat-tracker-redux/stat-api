@@ -72,5 +72,5 @@ class UserViewsTest(TestCase):
                                          content_type='application/json',
                                          data=json_string)
         post_response = user_create(post_request)
-        self.assertEqual(post_response.text,
-                         'Please use the correct JSON format')
+        self.assertEqual(post_response.content,
+                         b'Please use the correct JSON format')
