@@ -21,7 +21,7 @@ def user_create(request):
                                             user_info['password'])
             user.save()
         except KeyError:
-            return HttpResponse('', status=400)
+            return HttpResponse('Please use the correct JSON format', status=400)
 
         return HttpResponse('')
     else:
