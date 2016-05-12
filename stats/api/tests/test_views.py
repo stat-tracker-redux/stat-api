@@ -53,7 +53,7 @@ class UserViewsTest(TestCase):
     def test_register_url_bad_json_returns_400_error(self):
         """
         Tests that a POST request with an improperly formatted
-        JSON returns an error
+        JSON returns a 400 error
         """
         json_string = '{"nothing": "my bad JSON"}'
         post_request = self.factory.post('/register/',
@@ -61,3 +61,16 @@ class UserViewsTest(TestCase):
                                          data=json_string)
         post_response = user_create(post_request)
         self.assertEqual(post_response.status_code, 400)
+
+    def test_register_url_bad_json_returns_custom_message(self):
+        """
+        Tests that a POST request with an improperly formatted
+        JSON returns a custom error message
+        """
+        json_string = '{"nothing": "my bad JSON"}'
+        post_request = self.factory.post('/register/',
+                                         content_type='application/json',
+                                         data=json_string)
+        post_response = user_create(post_request)
+        self.assertEqual(post_response.text,
+                         'Please use the correct JSON format')
