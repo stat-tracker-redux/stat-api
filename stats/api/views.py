@@ -23,6 +23,6 @@ def user_create(request):
         except KeyError:
             return HttpResponse('Please use the correct JSON format', status=400)
 
-        return HttpResponse('')
+        return HttpResponse('')  # TODO: add message
     else:
-        return HttpResponse('', status=500)
+        return HttpResponse('', status=500)  # TODO: add message
