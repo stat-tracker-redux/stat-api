@@ -22,5 +22,5 @@ class UserURLsTest(TestCase):
         Tests that the /api/logout/ endpoint resolves to
         view titled logout
         """
-        found_logout = resolve('/api/logout')
+        found_logout = resolve('/api/logout/')
         self.assertEqual(found_logout.func, logout)
