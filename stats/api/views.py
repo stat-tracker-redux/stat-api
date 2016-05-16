@@ -26,3 +26,6 @@ def user_create(request):
         return HttpResponse('')  # TODO: add message
     else:
         return HttpResponse('', status=500)  # TODO: add message
+
+def logout(request):
+    pass
