@@ -3,6 +3,7 @@ import json
 
 from django.test import TestCase, LiveServerTestCase
 from django.contrib.auth.models import User
+from rest_framework.authtoken.models import Token
 
 
 class UserExperienceTestCase(LiveServerTestCase):
@@ -18,6 +19,9 @@ class UserExperienceTestCase(LiveServerTestCase):
                                         password=self.password
                                         )
         user.save()
+        token = Token.objects.create(user=user)
+        token.save()
+        self.token = token.key
 
     def test_can_create_a_new_user(self):
         """
@@ -45,5 +49,15 @@ class UserExperienceTestCase(LiveServerTestCase):
                           data={"username": self.username,
                                 "password": self.password})
                                 # TODO: figure out why json doesn't work here
-        # self.assertEqual(self.user.username, 'exists')
         self.assertEqual(login_resp.status_code, 200)
+
+    def test_user_can_logout(self):
+        """
+        Test that a logged-in user can logout at /api/logout/
+        """
+        logout_resp = post(self.live_server_url + '/api/logout/',
+                           data=json.dumps({"username": self.username,
+                                            "password": self.password}),
+                           headers={'Authorization':
+                                    'access_token ' + self.token})
+        self.assertEqual(logout_resp.status_code, 200)
