@@ -20,4 +20,6 @@ from api import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^register/$', views.user_create),
+    url(r'^api/login/$', 'rest_framework.authtoken.views.obtain_auth_token'),
+        # TODO: clear up warning with /api/login/
 ]
