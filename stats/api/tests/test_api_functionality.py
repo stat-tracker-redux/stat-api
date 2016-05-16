@@ -6,6 +6,19 @@ from django.contrib.auth.models import User
 
 
 class UserExperienceTestCase(LiveServerTestCase):
+    def setUp(self):
+        """
+        Create a user for login/logout tests
+        """
+        self.username = 'exists'
+        self.email = 'exists@email.com'
+        self.password = 'thispassword'
+        user = User.objects.create_user(username=self.username,
+                                        email=self.email,
+                                        password=self.password
+                                        )
+        user.save()
+
     def test_can_create_a_new_user(self):
         """
         Test that the /register/ endpoint can succesfully create a new user
@@ -23,3 +36,14 @@ class UserExperienceTestCase(LiveServerTestCase):
         self.assertEqual(User.objects.get(
                          email='todd.mcbuffy@gmail.com').username,
                          'superlunk360')
+
+    def test_user_can_login(self):
+        """
+        Test that an existing user can login at /api/login/ endpoint
+        """
+        login_resp = post(self.live_server_url + '/api/login/',
+                          data={"username": self.username,
+                                "password": self.password})
+                                # TODO: figure out why json doesn't work here
+        # self.assertEqual(self.user.username, 'exists')
+        self.assertEqual(login_resp.status_code, 200)
