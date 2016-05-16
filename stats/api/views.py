@@ -27,5 +27,7 @@ def user_create(request):
     else:
         return HttpResponse('', status=500)  # TODO: add message
 
+
+@csrf_exempt
 def logout(request):
-    pass
+    return HttpResponse('')
