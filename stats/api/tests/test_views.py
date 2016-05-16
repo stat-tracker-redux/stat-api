@@ -1,7 +1,7 @@
 from django.http import HttpRequest
 from django.test import TestCase, RequestFactory
 from django.contrib.auth.models import User
-from api.views import user_create
+from api.views import user_create, logout
 
 
 class UserViewsTest(TestCase):
@@ -74,3 +74,11 @@ class UserViewsTest(TestCase):
         post_response = user_create(post_request)
         self.assertEqual(post_response.content,
                          b'Please use the correct JSON format')
+
+    def test_logout_url_returns_empty_string(self):
+        """
+        Tests that request to logout returns an empty string
+        """
+        request = self.factory.get('/api/logout/')
+        response = logout(request)
+        self.assertEqual(response.content, b'')
