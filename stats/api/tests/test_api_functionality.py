@@ -50,6 +50,8 @@ class UserExperienceTestCase(LiveServerTestCase):
                                 "password": self.password})
                                 # TODO: figure out why json doesn't work here
         self.assertEqual(login_resp.status_code, 200)
+        self.assertEqual(login_resp.json()['token'], self.token)
+
 
     def test_user_can_logout(self):
         """
