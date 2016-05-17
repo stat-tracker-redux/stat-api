@@ -75,11 +75,18 @@ class UserViewsTest(TestCase):
         self.assertEqual(post_response.content,
                          b'Please use the correct JSON format')
 
-
     def test_logout_url_get_requests_returns_405_error(self):
         """
-        Tests that a logout view requires token authentication
+        Tests that get requests to logout view return error
         """
         request = self.factory.get('/api/logout/')
         response = logout(request)
         self.assertEqual(response.status_code, 405)
+
+    def test_logout_url_post_requests_return_200(self):
+        """
+        Tests that post requests to logout view pass
+        """
+        request = self.factory.post('/api/logout')
+        response = logout(request)
+        self.assertEqual(response.status_code, 200)
