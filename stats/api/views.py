@@ -4,7 +4,8 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 
 # Create your views here.
 
@@ -30,6 +31,6 @@ def user_create(request):
 
 
 @api_view(['POST'])
-@csrf_exempt
+@permission_classes((IsAuthenticated,))
 def logout(request):
     return HttpResponse('')
