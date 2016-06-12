@@ -1,15 +1,25 @@
 from django.http import HttpRequest
 from django.test import TestCase, RequestFactory
 from django.contrib.auth.models import User
+from rest_framework.authtoken.models import Token
 from api.views import user_create, logout
 
 
 class UserViewsTest(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
-        # self.user = User.objects.create_user(
-        #     username='test', email='test@email.com', password='password'
-        # )
+        self.username = 'test'
+        self.email = 'test@email.com'
+        self.password = 'password'
+        user = User.objects.create_user(
+            username=self.username,
+            email=self.email,
+            password=self.password
+        )
+        user.save()
+        token = Token.objects.create(user=user)
+        token.save()
+        self.token = token.key
 
     def test_register_url_returns_empty_string(self):
         """
@@ -82,6 +92,7 @@ class UserViewsTest(TestCase):
         request = self.factory.get('/api/logout/')
         response = logout(request)
         self.assertEqual(response.status_code, 405)
+        #TODO: refactor to test for failing of authenticated GET request
 
     def test_logout_url_non_authenticated_post_requests_return_403(self):
         """
@@ -90,3 +101,17 @@ class UserViewsTest(TestCase):
         request = self.factory.post('/api/logout/')
         response = logout(request)
         self.assertEqual(response.status_code, 403)
+
+    def test_logout_url_authenticated_post_requests_return_200(self):
+        """
+        Tests that authenticated post requests to logout view
+        return 200 OK Code
+        """
+        request = self.factory.post('/api/logout/',
+                                    content_type='application/json',
+                                    headers={'Authorization':
+                                             'Token ' + self.token},
+                                    data={'username': self.username,
+                                          'password': self.password})
+        response = logout(request)
+        self.assertEqual(response.status_code, 200)

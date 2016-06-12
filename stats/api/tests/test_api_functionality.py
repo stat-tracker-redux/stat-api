@@ -58,9 +58,9 @@ class UserExperienceTestCase(LiveServerTestCase):
         Test that a logged-in user can logout at /api/logout/
         """
         logout_resp = post(self.live_server_url + '/api/logout/',
-                           data=json.dumps({"username": self.username,
-                                            "password": self.password}),
+                           data={"username": self.username,
+                                            "password": self.password},
                            headers={'Authorization':
-                                    'access_token ' + self.token})
+                                    'Token ' + self.token})
         self.assertEqual(logout_resp.status_code, 200)
         self.assertFalse(Token.objects.get(key=self.token))
