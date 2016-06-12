@@ -6,6 +6,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.authtoken.models import Token
+
 
 # Create your views here.
 
@@ -33,4 +35,5 @@ def user_create(request):
 @api_view(['POST'])
 @permission_classes((IsAuthenticated,))
 def logout(request):
+    Token.objects.get(user=request.user).delete()
     return HttpResponse('')
