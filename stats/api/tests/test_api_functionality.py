@@ -1,7 +1,7 @@
-from requests import get, post
+from requests import post
 import json
 
-from django.test import TestCase, LiveServerTestCase
+from django.test import LiveServerTestCase
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 
@@ -28,10 +28,11 @@ class UserExperienceTestCase(LiveServerTestCase):
         Test that the /register/ endpoint can succesfully create a new user
         """
         # Todd registers with his email and password
+        json_dict = {"username": "superlunk360",
+                     "email": "todd.mcbuffy@gmail.com",
+                     "password": "supersecret"}
         register_resp = post(self.live_server_url + '/register/',
-                             data=json.dumps({"username": "superlunk360",
-                                              "email": "todd.mcbuffy@gmail.com",
-                                              "password": "supersecret"}))
+                             data=json.dumps(json_dict))
         self.assertEquals(register_resp.status_code, 200)
         self.assertEquals(register_resp.text, '')
 
@@ -45,10 +46,10 @@ class UserExperienceTestCase(LiveServerTestCase):
         """
         Test that an existing user can login at /api/login/ endpoint
         """
+        # TODO: figure out why json doesn't work for data here
         login_resp = post(self.live_server_url + '/api/login/',
                           data={"username": self.username,
                                 "password": self.password})
-                                # TODO: figure out why json doesn't work here
         self.assertEqual(login_resp.status_code, 200)
         self.assertEqual(login_resp.json()['token'], self.token)
 

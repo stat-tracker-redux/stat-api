@@ -1,4 +1,3 @@
-from django.http import HttpRequest
 from django.test import TestCase, RequestFactory
 from django.contrib.auth.models import User
 from api.views import user_create, logout
@@ -36,8 +35,12 @@ class UserViewsTest(TestCase):
         Tests that POST requests get through to register endpoint
         and that the POST has the correct format
         """
-        json_string = '{"username": "user", "email": "user@email.com", "password": "supersecret"}'
-        post_request = self.factory.post('/register/', content_type='application/json', data=json_string)
+        json_string = ('{"username": "user",'
+                       ' "email": "user@email.com",'
+                       ' "password": "supersecret"}')
+        post_request = self.factory.post('/register/',
+                                         content_type='application/json',
+                                         data=json_string)
         post_response = user_create(post_request)
         self.assertEqual(post_response.status_code, 200)
 
@@ -46,11 +49,13 @@ class UserViewsTest(TestCase):
         Tests that a POST request with the correct JSON format
         creates a new user
         """
-        json_string = '{"username": "user", "email": "user@email.com", "password": "supersecret"}'
+        json_string = ('{"username": "user",'
+                       ' "email": "user@email.com",'
+                       ' "password": "supersecret"}')
         post_request = self.factory.post('/register/',
                                          content_type='application/json',
                                          data=json_string)
-        post_response = user_create(post_request)
+        user_create(post_request)
         self.assertEqual(User.objects.get(username='user').email,
                          "user@email.com")
 
