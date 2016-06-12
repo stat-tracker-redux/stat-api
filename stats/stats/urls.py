@@ -16,12 +16,12 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from api import views
+from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^register/$', views.user_create),
-    url(r'^api/login/$', 'rest_framework.authtoken.views.obtain_auth_token'),
-    # TODO: clear up warning with /api/login/
+    url(r'^api/login/$', obtain_auth_token),
     url(r'^api/logout/$', views.logout),
 
 ]
