@@ -52,7 +52,6 @@ class UserExperienceTestCase(LiveServerTestCase):
         self.assertEqual(login_resp.status_code, 200)
         self.assertEqual(login_resp.json()['token'], self.token)
 
-
     def test_user_can_logout(self):
         """
         Test that a logged-in user can logout at /api/logout/
@@ -63,4 +62,6 @@ class UserExperienceTestCase(LiveServerTestCase):
                            headers={'Authorization':
                                     'Token ' + self.token})
         self.assertEqual(logout_resp.status_code, 200)
-        self.assertFalse(Token.objects.get(key=self.token))
+        self.assertRaises(Token.DoesNotExist,
+                          Token.objects.get,
+                          key=self.token)
