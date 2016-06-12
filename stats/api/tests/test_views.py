@@ -5,7 +5,6 @@ from api.views import user_create, logout
 from rest_framework.authtoken.models import Token
 
 
-
 class UserViewsTest(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
@@ -105,3 +104,27 @@ class UserViewsTest(TestCase):
         request = self.factory.post('/api/logout/')
         response = logout(request)
         self.assertEqual(response.status_code, 401)
+
+    def test_logout_url_authorized_post_returns_200(self):
+        """
+        Tests that an authorized post to the logout view returns a
+        status code of 200
+        """
+        post_request = self.factory.post('/api/logout/',
+                                         **{'HTTP_AUTHORIZATION':
+                                            'Token ' + self.token})
+        response = logout(post_request)
+        self.assertEqual(response.status_code, 200)
+
+    def test_logout_url_authorized_post_deletes_token(self):
+        """
+        Tests that a token is deleted with an authorized post to
+        the logout view
+        """
+        post_request = self.factory.post('/api/logout/',
+                                         **{'HTTP_AUTHORIZATION':
+                                            'Token ' + self.token})
+        logout(post_request)
+        self.assertRaises(Token.DoesNotExist,
+                          Token.objects.get,
+                          key=self.token)
