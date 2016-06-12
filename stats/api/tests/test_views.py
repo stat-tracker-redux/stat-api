@@ -2,14 +2,27 @@ from django.http import HttpRequest
 from django.test import TestCase, RequestFactory
 from django.contrib.auth.models import User
 from api.views import user_create, logout
+from rest_framework.authtoken.models import Token
+
 
 
 class UserViewsTest(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
-        # self.user = User.objects.create_user(
-        #     username='test', email='test@email.com', password='password'
-        # )
+        """
+        Create a user for login/logout tests
+        """
+        self.username = 'exists'
+        self.email = 'exists@email.com'
+        self.password = 'thispassword'
+        user = User.objects.create_user(username=self.username,
+                                        email=self.email,
+                                        password=self.password
+                                        )
+        user.save()
+        token = Token.objects.create(user=user)
+        token.save()
+        self.token = token.key
 
     def test_register_url_returns_empty_string(self):
         """
@@ -79,14 +92,16 @@ class UserViewsTest(TestCase):
         """
         Tests that get requests to logout view return error
         """
-        request = self.factory.get('/api/logout/')
+        request = self.factory.get('/api/logout/',
+                                   **{'HTTP_AUTHORIZATION':
+                                       'Token ' + self.token})
         response = logout(request)
         self.assertEqual(response.status_code, 405)
 
-    def test_logout_url_non_authenticated_post_requests_return_403(self):
+    def test_logout_url_unauthorized_post_requests_return_401(self):
         """
         Tests that non-authenticated post requests to logout view fail
         """
         request = self.factory.post('/api/logout/')
         response = logout(request)
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 401)
