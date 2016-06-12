@@ -61,6 +61,6 @@ class UserExperienceTestCase(LiveServerTestCase):
                            data=json.dumps({"username": self.username,
                                             "password": self.password}),
                            headers={'Authorization':
-                                    'access_token ' + self.token})
+                                    'Token ' + self.token})
         self.assertEqual(logout_resp.status_code, 200)
         self.assertFalse(Token.objects.get(key=self.token))
